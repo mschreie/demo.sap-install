@@ -1,0 +1,48 @@
+---
+####################################################
+#
+# Mounting NFS directory to extract why this fails...
+# yust as a reproducer
+#
+
+- name: the Mounting game
+  hosts: hanas, s4hanas
+  become: true
+
+  # Default variables for the playbooks can be set here
+  # and can be overwritten in the template file
+  vars:
+    reg_osrelease: 8.4
+    nfs_software_archive_srv: 10.6.80.183:/export/sap-software
+    nfs_software_archive_dir: /sap-software
+
+  tasks:
+    - name: NFS client is installed
+      dnf:
+         name:
+           - nfs-utils
+         state: present
+
+    - name: Ensure Mountpoint exists
+      file:
+         path: "{{ nfs_software_archive_dir }}"
+         state: directory
+         mode: '0755'
+
+    - name: Ensure NFS Server with SAP Software is mounted
+      ansible.posix.mount:
+        src: "{{ nfs_software_archive_srv }}"
+        path: "{{ nfs_software_archive_dir }}"
+        opts: rw,sync,hard,noatime
+        fstype: nfs
+        state: present
+
+    # Debug by Markus S:
+    - name: Read all mounts
+      ansible.builtin.shell: 
+         mount
+      register: mount_output
+
+    - name: List all mounts
+      ansible.builtin.debug:
+         var: mount_output.stdout_lines

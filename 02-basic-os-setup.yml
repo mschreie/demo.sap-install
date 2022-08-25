@@ -99,12 +99,12 @@
         path: "{{ nfs_software_archive_dir }}"
         opts: rw,sync,hard,noatime
         fstype: nfs
-        state: present
+        state: mounted
 
     # Debug by Markus S:
     - name: Read all mounts
       ansible.builtin.shell: 
-         mount
+         mount | grep nfs
       register: mount_output
 
     - name: List all mounts

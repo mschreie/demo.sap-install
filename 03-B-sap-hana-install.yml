@@ -10,6 +10,11 @@
 
   tasks:
 
+    # MArkus Schreier Debug:
+    - name: Debug install directory value
+      debug:
+        msg: "sap_hana_install_software_directory: {{ sap_hana_install_software_directory }}"
+
     - name: execute the SAP Hana Installation
       include_role:
         name: community.sap_install.sap_hana_install

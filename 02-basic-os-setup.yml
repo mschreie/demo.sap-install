@@ -100,3 +100,13 @@
         opts: rw,sync,hard,noatime
         fstype: nfs
         state: present
+
+    # Debug by Markus S:
+    - name: Read all mounts
+      ansible.builtin.shell: 
+         mount
+      register: mount_output
+
+    - name: List all mounts
+      ansible.builtin.debug:
+         var: mount_output.stdout_lines

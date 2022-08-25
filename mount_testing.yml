@@ -35,7 +35,7 @@
         path: "{{ nfs_software_archive_dir }}"
         opts: rw,sync,hard,noatime
         fstype: nfs
-        state: present
+        state: mounted
 
     # Debug by Markus S:
     - name: Read all mounts

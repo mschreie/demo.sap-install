@@ -1,0 +1,203 @@
+## These vars 
+##  - should be adjusted to your needs
+##  - and need to go into the extra vars text box of the overall workflow.
+## this assures that all jobs have this data available
+
+---
+# these vars need to be before the host definitions as the host definitions use them...
+
+####  RHEL 8.5 Install variables
+#URL for downloading the ISO file
+iso_url: https://access.cdn.redhat.com/content/origin/files/sha256/1f/1f78e705cd1d8897a05afa060f77d81ed81ac141c2465d4763c0382aa96cadd0/rhel-8.5-x86_64-dvd.iso?user=46606641cfc6a3ae593c2684110d9148&_auth_=1641415419_be0f699132c7cfed36b6ca8f6c4be49c
+
+#ISO file names
+org_iso_file: rhel-8.5-x86_64-dvd.iso
+
+#Directories
+bastion_iso_dir: /var/www/html/isos
+mnt_dir:  /rhel_cdrom_mount
+wrk_dir:  /tmp/rhel_cdrom
+
+#Absolute names for orginal and custom iso
+org_iso:  "{{ bastion_iso_dir }}/{{ org_iso_file }}"   ### DEPRICATED 
+original_iso_full_path: "{{ org_iso }}"
+
+
+##### Variable for booting from html
+
+bastion_get_url: "http://{{ hostvars.bastion_host.ansible_host }}/isos"
+
+
+##### Defining machines deployed via OneView
+oneview_machines:
+  - name: uc10hana
+    #disk_gb: 400
+    #mem_mb: 131072
+    #cpus: 8
+    #group: hanas
+    #storage_pools:
+    #  - name: sap
+    #    disks:
+    #      - sdb
+    #    volumes:
+    #      - name: data
+    #        size: "128 GiB"
+    #        mount_point: "/hana/data"
+    #        fs_type: xfs
+    #        state: present
+    #      - name: log
+    #        size: "128 GiB"
+    #        mount_point: "/hana/log"
+    #        fs_type: xfs
+    #        state: present
+    #      - name: shared
+    #        size: "96 GiB"
+    #        mount_point: "/hana/shared"
+    #        fs_type: xfs
+    #        state: present
+    #      - name: sap
+    #        size: "40 GiB"
+    #        mount_point: "/usr/sap"
+    #        state: present
+
+    host_ip: "1.2.3.4",
+    ilo_ip: "10.6.25.144",
+
+    # Oneview configuration
+    ov_hardware: "Demo1_Rack12_Frame3, bay 5"
+    #server_hardware_type_name: "SY 480 Gen10 4"
+    server_hardware_type_name: "SY 480 Gen10 (NVIDIA)"
+    enclosure_group_name: "Demo1_Rack12_EG"
+    deployment_network_name: "Redhat_workload"
+
+    ov_template: RedHat_Ansible_demo
+    # OneView Server profile Template creation
+    ##server_profile_template_name: "{{ ov_template }}" # Maybe use Anchors and alias 
+    server_profile_template_name: RedHat_Ansible_demo
+
+    #### on the Bastion host: 
+    cust_iso_file: "custom_rhel_uc10s4hana.iso
+    cust_iso: "{{ bastion_iso_dir }}/{{ cust_iso_file }}"
+
+    #### boot from (via network):
+    rhel_installiso: "{{ bastion_get_url }}/{{ cust_iso_file }}"
+
+    #### Variables for configuring ks.cfg
+    #Language
+    keyboard_layout: es
+    system_language: en_US
+    
+    #Network related (righ now this automation is only ready for dhcp)
+    
+    # now defined at host level
+    #network_bootproto: dhcp
+    #host_name: rhel.local
+    
+    #Other stuff
+    time_zone: Europe/Paris
+
+vmware_machines:
+  - name: uc10s4hana
+    disk_gb: 250
+    group: s4hanas
+    storage_pools:
+      - name: sap
+        disks:
+          - sdb
+        volumes:
+          - name: sap
+            size: "50 GiB"
+            mount_point: "/usr/sap"
+            state: present
+          - name: sapmnt
+            size: "20 GiB"
+            mount_point: "/sapmnt"
+            state: present
+          - name: swap
+            size: "21 GiB"
+            fs_type: swap
+            mount_options: swap
+            state: present
+
+            
+    
+# Mountpoints for SAP Software
+nfs_software_archive_dir: /sap-software
+nfs_software_archive_srv: 10.6.80.183:/export/sap-software # DNS is unconfigured
+
+# sap_general_preconfigure
+#-------------------------
+sap_domain: redhat.hpecic.net
+sap_general_preconfigure_modify_etc_hosts: true
+sap_general_preconfigure_update: true
+sap_general_preconfigure_fail_if_reboot_required: false
+sap_general_preconfigure_reboot_ok: true
+
+# sap_hana_preconfigure
+#----------------------
+sap_hana_preconfigure_update: true
+sap_hana_preconfigure_fail_if_reboot_required: false
+sap_hana_preconfigure_reboot_ok: true
+
+# sap_netweaver_preconfigure
+#---------------------------
+# No definition needed
+
+# Path to SAP Software on fileshare
+#----------------------------------
+# download new HANA version, or S4version -- just put it on the share and change here
+sap_hana_version: HANA2SPS06
+sap_swpm_product: S4HANA2021.FNDN
+
+# sap_hana_install
+#------------------
+# need to allow jinja2 in extra vars (see controller config)
+sap_hana_install_software_directory: "{{ nfs_software_archive_dir }}/{{ sap_hana_version }}"     
+##sap_hana_install_software_directory: /sap-software/HANA2SPS06  ### geht aber uncool
+#sap_hana_install_sapcar_filename: SAPCAR
+sap_hana_install_sapcar_filename: SAPCAR_1115-70006178.EXE
+sap_hana_install_software_extract_directory: "/home/sapinst"
+sap_hana_install_common_master_password: "R3dh4t$123" 
+sap_hana_sid: 'RHA'
+sap_hana_instance_number: '00'
+sap_hana_install_instance_number: "{{ sap_hana_instance_number }}"
+sap_hana_install_sid: "{{ sap_hana_sid }}" 
+
+# sap_swpm
+#---------
+# Disable update of /etc/hosts, because of known bugs
+sap_swpm_update_etchosts: false
+
+# Product ID for New Installation
+sap_swpm_product_catalog_id: NW_ABAP_OneHost:{{ sap_swpm_product }}.HDB.ABAP
+
+# Software
+sap_swpm_software_path: "{{ nfs_software_archive_dir }}/{{ sap_swpm_product }}" # doesn't work
+##sap_swpm_software_path: /sap-software/S4HANA2021.FNDN
+sap_swpm_sapcar_path: "{{ sap_swpm_software_path }}"
+sap_swpm_swpm_path: "{{ sap_swpm_software_path }}"
+
+# NW Passwords
+sap_swpm_master_password: "R3dh4t$123"
+sap_swpm_ddic_000_password: "{{ sap_swpm_master_password }}"
+# HDB Passwords
+sap_swpm_db_system_password: "{{ sap_swpm_master_password }}"
+sap_swpm_db_systemdb_password: "{{ sap_swpm_master_password }}"
+sap_swpm_db_schema_abap_password: "{{ sap_swpm_master_password }}"
+sap_swpm_db_sidadm_password: "{{ sap_swpm_master_password }}"
+
+# Default Value
+#sap_swpm_db_schema_abap: "SAPHANADB"
+
+# NW Instance Parameters
+sap_swpm_sid: S4H
+sap_swpm_pas_instance_nr: "01"
+sap_swpm_ascs_instance_nr: "02"
+sap_swpm_ascs_instance_hostname: "{{ ansible_hostname }}"
+sap_swpm_fqdn: "{{ ansible_domain }}"
+# HDB Instance Parameters
+# For dual host installation, change the db_host to appropriate value
+sap_swpm_db_host: "uc10hana"
+sap_swpm_db_sid: "{{ sap_hana_install_sid }}"
+sap_swpm_db_instance_nr: "{{ sap_hana_install_instance_number }}"
+

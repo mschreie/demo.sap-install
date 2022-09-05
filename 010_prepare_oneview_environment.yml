@@ -14,7 +14,7 @@
     ### ov_profile is not used throughout this playbook => maybe this task is not needed
     - name: Set Oneview Server Profile Name for the host in question
       set_fact:
-        item.ov_profile: "RedHat_Ansible_demo_{{ item.name }}"
+        {"{{ item }}.ov_profile: "RedHat_Ansible_demo_{{ item.name }}"}
       when: item.ov_profile is undefined or item.ov_profile is not match ("^RedHat_Ansible_demo.*")
       loop: "{{ oneview_machines }}"
 

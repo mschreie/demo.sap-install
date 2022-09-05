@@ -58,7 +58,7 @@
 #        var: oneview_server_info.results.0.ansible_facts.server_hardware.serverProfileUri
 
     - name: Gather facts about Server Profile
-      oneview_server_profile_facts:
+      hpe.oneview.oneview_server_profile_facts:
         hostname: "{{ item.oneview_host }}"
         username: "{{ oneview_username }}"
         password: "{{ oneview_password }}"

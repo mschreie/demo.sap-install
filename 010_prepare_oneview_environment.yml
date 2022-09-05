@@ -46,7 +46,8 @@
       loop: "{{ oneview_machines }}"
 
     - name: Debug infos about the relevant servers
-      msg:  "oneview_server_info: {{ oneview_server_info }}"
+      debug:
+        msg:  "oneview_server_info: {{ oneview_server_info }}"
 
     - name: Remove the server profiles
       hpe.oneview.oneview_server_profile:

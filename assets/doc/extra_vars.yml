@@ -45,6 +45,7 @@ oneview_machines:
 
     ov_template: RedHat_Ansible_demo
     server_profile_template_name: RedHat_Ansible_demo
+    server_profile_name: RedHat_Ansible_demo_target1
 
     #### on the Bastion host:
     cust_iso_file: "custom_rhel_uc10s4hana.iso"

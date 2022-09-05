@@ -65,10 +65,17 @@
         auth_login_domain: "{{ oneview_domain }}"
         api_version: "{{ oneview_apiversion }}"
         name : '{{ item.ov_hardware }}'
+      register: oneview_server_profile_info
+      loop: "{{ oneview_machines }}"
 
     - name: Print server_profile
       debug:
         var: server_profiles
+
+    - name: Print  infos about the relevant servers profiles
+      debug:
+       var: oneview_server_profile_info 
+
 
 
     - name: Remove the server profiles

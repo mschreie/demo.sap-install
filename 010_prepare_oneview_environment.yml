@@ -53,7 +53,7 @@
         api_version: "{{ oneview_apiversion }}"
         state: absent
         data:
-          name: "{{ item.ov_template }}_{{ item.inventory_hostname_short }}"
+          name: "{{ item.ov_template }}_{{ item.name }}"
       loop: "{{ oneview_machines }}"
     
     ### FIXME: This might fail when same ov_template is used for different servers

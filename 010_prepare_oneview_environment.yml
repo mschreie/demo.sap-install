@@ -70,7 +70,7 @@
         auth_login_domain: "{{ oneview_domain }}"
         api_version: "{{ oneview_apiversion }}"
         ##name : '{{ item.ov_hardware }}'
-        uri: oneview_server_info.results.0.ansible_facts.server_hardware.serverProfileUri
+        #uri: oneview_server_info.results.0.ansible_facts.server_hardware.serverProfileUri
       register: oneview_server_profile_info
       loop: "{{ oneview_machines }}"
 

@@ -57,8 +57,6 @@
           ## 2 different deployment methods with 2 different server_profile_names
           ## name: "{{ item.ov_template }}_{{ item.name }}"
           name: "{{ item.server_profile_name }}"
-          serverProfileUri: oneview_server_info.results.0.ansible_facts.server_hardware.serverProfileUri
-          server_hardware: "{{ item.ov_hardware }}"
       loop: "{{ oneview_machines }}"
     
     ### FIXME: This might fail when same ov_template is used for different servers

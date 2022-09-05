@@ -20,7 +20,7 @@
 
     #- name: Gather facts about all Server Hardwares
       #oneview_server_hardware_facts:
-        #hostname: "{{ oneview_host }}"
+        #hostname: "{{ item.oneview_host }}"
         #username: "{{ oneview_username }}"
         #password: "{{ oneview_password }}"
         #auth_login_domain: "{{ oneview_domain }}"
@@ -30,7 +30,7 @@
 
     - name: Power Off compute in order to remove the profile
       hpe.oneview.oneview_server_hardware:
-        hostname: "{{ oneview_host }}"
+        hostname: "{{ item.oneview_host }}"
         username: "{{ oneview_username }}"
         password: "{{ oneview_password }}"
         auth_login_domain: "{{ oneview_domain }}"
@@ -45,7 +45,7 @@
 
     - name: Remove the server profiles
       hpe.oneview.oneview_server_profile:
-        hostname: "{{ oneview_host }}"
+        hostname: "{{ item.oneview_host }}"
         username: "{{ oneview_username }}"
         password: "{{ oneview_password }}"
         auth_login_domain: "{{ oneview_domain }}"
@@ -59,7 +59,7 @@
     ### first deletion works, second will not have sth. to delete
     - name: Delete the Server Profile Template
       hpe.oneview.oneview_server_profile_template:
-        hostname: "{{ oneview_host }}"
+        hostname: "{{ item.oneview_host }}"
         username: "{{ oneview_username }}"
         password: "{{ oneview_password }}"
         auth_login_domain: "{{ oneview_domain }}"

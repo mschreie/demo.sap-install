@@ -59,7 +59,7 @@
 
     - name: Loop Print serverProfileUri
       debug:
-        var: oneview_server_info.results.item.ansible_facts.server_hardware.serverProfileUri
+        var: item.ansible_facts.server_hardware.serverProfileUri
       loop: "{{ oneview_server_info.results }}"
 
     - name: Gather facts about Server Profile
@@ -70,9 +70,9 @@
         auth_login_domain: "{{ oneview_domain }}"
         api_version: "{{ oneview_apiversion }}"
         ##name : '{{ item.ov_hardware }}'
-        uri: oneview_server_info.results.item.ansible_facts.server_hardware.serverProfileUri
+        uri: oneview_server_info.results.0.ansible_facts.server_hardware.serverProfileUri
       register: oneview_server_profile_info
-      loop: "{{ oneview_server_info.results }}"
+      loop: "{{ oneview_machines }}"
 
     - name: Print server_profile
       debug:

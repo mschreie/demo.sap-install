@@ -55,7 +55,7 @@
         data:
           ## 2 different deployment methods with 2 different server_profile_names
           ## name: "{{ item.ov_template }}_{{ item.name }}"
-          server_hardware: "{{ item.server_hardware }}"
+          server_hardware: "{{ item.ov_hardware }}"
       loop: "{{ oneview_machines }}"
     
     ### FIXME: This might fail when same ov_template is used for different servers

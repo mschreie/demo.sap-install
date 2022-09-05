@@ -1,0 +1,104 @@
+---
+- hosts: localhost
+  gather_facts: no
+
+  vars:
+
+  tasks:
+    - fail:
+        msg: "You need to define ov_hardware for each host which should be deployed via this script"
+      when: item.ov_hardware is undefined 
+      loop: "{{ oneview_machines }}"
+
+FIXME: Variablenzuordnung klappt so nicht!
+    - name: Set Oneview Server Profile Name for the host in question
+      set_fact:
+        {"{{ item }}.ov_profile: RedHat_Ansible_demo_{{ item.name }}"}
+      when: item.ov_profile is undefined or item.ov_profile is not match ("^RedHat_Ansible_demo.*")
+      loop: "{{ oneview_machines }}"
+
+
+
+    - name: Power Off compute in order to remove the profile
+      hpe.oneview.oneview_server_hardware:
+        hostname: "{{ item.oneview_host }}"
+        username: "{{ oneview_username }}"
+        password: "{{ oneview_password }}"
+        auth_login_domain: "{{ oneview_domain }}"
+        api_version: "{{ oneview_apiversion }}"
+        state: power_state_set
+        data:
+          name : '{{ ov_hardware }}'
+          powerStateData:
+            powerState: "Off"
+            powerControl: "PressAndHold"
+      loop: "{{ oneview_machines }}"
+      
+    - name: Retrieve info of  server profile template 
+      hpe.oneview.oneview_server_profile_template_facts:
+        hostname: "{{ item.oneview_host }}"
+        username: "{{ oneview_username }}"
+        password: "{{ oneview_password }}"
+        auth_login_domain: "{{ oneview_domain }}"
+        api_version: "{{ oneview_apiversion }}"
+        name: "{{ ov_template }}"
+      loop: "{{ oneview_machines }}"
+
+    - name: show the details of the server profile template
+      debug:
+        var: server_profile_templates
+
+    - name: Create profile from template and assign to compute
+      hpe.oneview.oneview_server_profile:
+        hostname: "{{ item.oneview_host }}"
+        username: "{{ oneview_username }}"
+        password: "{{ oneview_password }}"
+        auth_login_domain: "{{ oneview_domain }}"
+        api_version: "{{ oneview_apiversion }}"
+        data:
+          name: "{{ ov_profile }}"
+          serverProfileTemplateName: "{{ ov_template }}"
+          serverHardwareName: "{{ ov_hardware }}"
+        params:
+          force: True
+      loop: "{{ oneview_machines }}"
+
+    - name: Ensure profile state is compliant
+      hpe.oneview.oneview_server_profile:
+        hostname: "{{ item.oneview_host }}"
+        username: "{{ oneview_username }}"
+        password: "{{ oneview_password }}"
+        auth_login_domain: "{{ oneview_domain }}"
+        api_version: "{{ oneview_apiversion }}"
+        state: "compliant"
+        data:
+          name: "{{ ov_profile }}"
+      loop: "{{ oneview_machines }}"
+
+    - name: Gather sso iLO url facts about a Server Hardware
+      hpe.oneview.oneview_server_hardware_facts:
+        hostname: "{{ item.oneview_host }}"
+        username: "{{ oneview_username }}"
+        password: "{{ oneview_password }}"
+        auth_login_domain: "{{ oneview_domain }}"
+        api_version: "{{ oneview_apiversion }}"
+        name: "{{ ov_hardware }}"
+        options:
+          - remoteConsoleUrl
+      loop: "{{ oneview_machines }}"
+ 
+    - name: Power Off the server hardware
+      hpe.oneview.oneview_server_hardware:
+        hostname: "{{ item.oneview_host }}"
+        username: "{{ oneview_username }}"
+        password: "{{ oneview_password }}"
+        auth_login_domain: "{{ oneview_domain }}"
+        api_version: "{{ oneview_apiversion }}"
+        state: power_state_set
+        data:
+            name : '{{ ov_hardware }}'
+            powerStateData:
+                powerState: "Off"
+                powerControl: "PressAndHold"
+      loop: "{{ oneview_machines }}"
+

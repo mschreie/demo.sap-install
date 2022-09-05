@@ -1,0 +1,9 @@
+- hosts: bastion_host
+  gather_facts: no
+  become: true
+
+  tasks:
+
+    - name: User role for creating a custom iso file
+      include_role:
+        name: custom-iso-role

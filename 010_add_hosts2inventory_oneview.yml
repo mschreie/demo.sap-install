@@ -2,6 +2,8 @@
 - hosts: localhost
   gather_facts: no
 
+  collections:
+    - ansible.controller
 
   tasks:
 

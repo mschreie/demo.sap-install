@@ -1,0 +1,18 @@
+---
+- hosts: localhost
+  gather_facts: no
+
+
+  tasks:
+
+    - name: Add OneView Host to inventory
+      ansible.controller.host:
+        name: "{{ item.oneview_host }}"
+        inventory: "{{ inventory_name_ov_hosts }}" 
+        validate_certs: no
+        enabled: "{{ item.enabled | default(true) }}"
+        description: "{{ item.description | default(omit) }}"
+        state: present
+        variables: 
+          {{ item }}
+      loop: "{{ oneview_machines }}"

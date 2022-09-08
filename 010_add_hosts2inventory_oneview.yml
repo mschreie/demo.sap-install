@@ -14,5 +14,5 @@
         description: "{{ item.description | default(omit) }}"
         state: present
         variables: 
-          {{ item }}
+          "{{ item }}"
       loop: "{{ oneview_machines }}"

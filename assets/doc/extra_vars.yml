@@ -61,6 +61,9 @@ oneview_machines:
     system_language: en_US
     time_zone: Europe/Paris
 
+    ### Root Password
+    rt_pass: "redhat123"
+
 vmware_machines:
   - name: uc10s4hana
     disk_gb: 250

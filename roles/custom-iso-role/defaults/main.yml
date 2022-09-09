@@ -15,7 +15,7 @@ cust_iso: "~/{{ cust_iso_file }}"
 #Configuring ks.cfg
 ##############################################
 
-keyboard_layout: "es"
+keyboard_layout: "en"
 system_language: "en_US.UTF-8"
 network_bootproto: "dhcp"
 time_zone: "Europe/Paris"

@@ -51,3 +51,16 @@
       loop:
         - "s4hanas"
         - "hanas"
+
+    - name: Add OneView Hosts to host group oneview_targets
+      ansible.controller.group:
+        name: "oneview_targets"
+        description: "oneview target hosts"
+        inventory: "{{ inventory_name_ov_hosts }}"
+        validate_certs: false
+        state: present
+        hosts:
+          "{{ lookup('vars', item) }}"
+      loop:
+        - "s4hanas"
+        - "hanas"

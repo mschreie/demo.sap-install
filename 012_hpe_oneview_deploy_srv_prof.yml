@@ -1,5 +1,5 @@
 ---
-- hosts: localhost
+- hosts: oneview_targets
   gather_facts: no
 
   vars:
@@ -7,21 +7,16 @@
   tasks:
     - fail:
         msg: "You need to define ov_hardware for each host which should be deployed via this script"
-      when: item.ov_hardware is undefined 
-      loop: "{{ oneview_machines }}"
+      when: ov_hardware is undefined 
 
-FIXME: Variablenzuordnung klappt so nicht!
     - name: Set Oneview Server Profile Name for the host in question
       set_fact:
-        {"{{ item }}.ov_profile: RedHat_Ansible_demo_{{ item.name }}"}
-      when: item.ov_profile is undefined or item.ov_profile is not match ("^RedHat_Ansible_demo.*")
-      loop: "{{ oneview_machines }}"
-
-
+        ov_profile: "RedHat_Ansible_demo_{{ inventory_hostname_short }}"
+      when: ov_profile is undefined or ov_profile is not match ("^RedHat_Ansible_demo_.*")
 
     - name: Power Off compute in order to remove the profile
       hpe.oneview.oneview_server_hardware:
-        hostname: "{{ item.oneview_host }}"
+        hostname: "{{ hostvars.oneview_host.ansible_host }}"
         username: "{{ oneview_username }}"
         password: "{{ oneview_password }}"
         auth_login_domain: "{{ oneview_domain }}"
@@ -32,17 +27,17 @@ FIXME: Variablenzuordnung klappt so nicht!
           powerStateData:
             powerState: "Off"
             powerControl: "PressAndHold"
-      loop: "{{ oneview_machines }}"
+      delegate_to: localhost
       
     - name: Retrieve info of  server profile template 
       hpe.oneview.oneview_server_profile_template_facts:
-        hostname: "{{ item.oneview_host }}"
+        hostname: "{{ hostvars.oneview_host.ansible_host }}"
         username: "{{ oneview_username }}"
         password: "{{ oneview_password }}"
         auth_login_domain: "{{ oneview_domain }}"
         api_version: "{{ oneview_apiversion }}"
         name: "{{ ov_template }}"
-      loop: "{{ oneview_machines }}"
+      delegate_to: localhost
 
     - name: show the details of the server profile template
       debug:
@@ -50,7 +45,7 @@ FIXME: Variablenzuordnung klappt so nicht!
 
     - name: Create profile from template and assign to compute
       hpe.oneview.oneview_server_profile:
-        hostname: "{{ item.oneview_host }}"
+        hostname: "{{ hostvars.oneview_host.ansible_host }}"
         username: "{{ oneview_username }}"
         password: "{{ oneview_password }}"
         auth_login_domain: "{{ oneview_domain }}"
@@ -61,11 +56,11 @@ FIXME: Variablenzuordnung klappt so nicht!
           serverHardwareName: "{{ ov_hardware }}"
         params:
           force: True
-      loop: "{{ oneview_machines }}"
+      delegate_to: localhost
 
     - name: Ensure profile state is compliant
       hpe.oneview.oneview_server_profile:
-        hostname: "{{ item.oneview_host }}"
+        hostname: "{{ hostvars.oneview_host.ansible_host }}"
         username: "{{ oneview_username }}"
         password: "{{ oneview_password }}"
         auth_login_domain: "{{ oneview_domain }}"
@@ -73,11 +68,11 @@ FIXME: Variablenzuordnung klappt so nicht!
         state: "compliant"
         data:
           name: "{{ ov_profile }}"
-      loop: "{{ oneview_machines }}"
+      delegate_to: localhost
 
     - name: Gather sso iLO url facts about a Server Hardware
       hpe.oneview.oneview_server_hardware_facts:
-        hostname: "{{ item.oneview_host }}"
+        hostname: "{{ hostvars.oneview_host.ansible_host }}"
         username: "{{ oneview_username }}"
         password: "{{ oneview_password }}"
         auth_login_domain: "{{ oneview_domain }}"
@@ -85,11 +80,11 @@ FIXME: Variablenzuordnung klappt so nicht!
         name: "{{ ov_hardware }}"
         options:
           - remoteConsoleUrl
-      loop: "{{ oneview_machines }}"
+      delegate_to: localhost
  
     - name: Power Off the server hardware
       hpe.oneview.oneview_server_hardware:
-        hostname: "{{ item.oneview_host }}"
+        hostname: "{{ hostvars.oneview_host.ansible_host }}"
         username: "{{ oneview_username }}"
         password: "{{ oneview_password }}"
         auth_login_domain: "{{ oneview_domain }}"
@@ -100,5 +95,5 @@ FIXME: Variablenzuordnung klappt so nicht!
             powerStateData:
                 powerState: "Off"
                 powerControl: "PressAndHold"
-      loop: "{{ oneview_machines }}"
+      delegate_to: localhost
 

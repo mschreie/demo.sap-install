@@ -33,6 +33,7 @@ bastion_get_url: "http://{{ hostvars.bastion_host.ansible_host }}/isos"
 ##### Defining machines deployed via OneView
 oneview_machines:
   - name: uc10hana
+    group: hanas
     host_ip: "1.2.3.4"
     ilo_ip: "10.6.25.144"
 

@@ -19,6 +19,14 @@
           "{{ item }}"
       loop: "{{ oneview_machines }}"
 
+    - name: initiate hana host group list
+      set_fact:
+        hanas: []
+
+    - name: initiate s4hana host group list
+      set_fact:
+        s4hanas: []
+
     - name: create hana host group list
       set_fact:
         hanas: "{{ hanas + item.name }}"
@@ -30,7 +38,6 @@
         s4hanas: "{{ s4hanas + item.name }}"
       when: item.group == "s4hanas"
       loop: "{{ oneview_machines }}"
-
 
     - name: Add OneView Hosts to host groups
       ansible.controller.group:

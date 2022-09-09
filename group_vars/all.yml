@@ -1,3 +1,4 @@
 ---
 inventory_name_ov_hosts: "uc10 - oneview hosts"
+vcenter_validate_certs: false
 

@@ -107,7 +107,7 @@
         auth_login_domain: "{{ oneview_domain }}"
         api_version: "{{ oneview_apiversion }}"
 
-        name: "{{ server_profile_template_name }}"
+        name: "{{ item.server_profile_template_name }}"
       loop: "{{ oneview_machines }}"
 
     - debug: var=server_profile_templates

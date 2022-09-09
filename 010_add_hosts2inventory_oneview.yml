@@ -29,13 +29,13 @@
 
     - name: create hana host group list
       set_fact:
-        hanas: "{{ hanas + item.name }}"
+        hanas: "{{ hanas + [ item.name ] }}"
       when: item.group == "hanas"
       loop: "{{ oneview_machines }}"
 
     - name: create s4hana host group list
       set_fact:
-        s4hanas: "{{ s4hanas + item.name }}"
+        s4hanas: "{{ s4hanas + [ item.name ]  }}"
       when: item.group == "s4hanas"
       loop: "{{ oneview_machines }}"
 

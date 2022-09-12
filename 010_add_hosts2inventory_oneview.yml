@@ -6,6 +6,15 @@
     - ansible.controller
 
   tasks:
+    - name: Delete all hosts not needed in oneview_targets any more
+      ansible.controller.host:
+        name: "{{ item }}"
+        inventory: "{{ inventory_name_ov_hosts }}"
+        validate_certs: false
+        state: absent
+      ## syntax not correct, so just delete all and add them back again
+      ## when item not in oneview_machines.name | tolist
+      with_items: groups['oneview_targets']
 
     - name: Add OneView Host to inventory
       ansible.controller.host:
@@ -48,6 +57,8 @@
         state: present
         hosts:
           "{{ lookup('vars', item) }}"
+        preserve_existing_hosts: true
+        preserve_existing_children: true
       loop:
         - "s4hanas"
         - "hanas"
@@ -61,6 +72,8 @@
         state: present
         hosts:
           "{{ lookup('vars', item) }}"
+        preserve_existing_hosts: true
+        preserve_existing_children: true
       loop:
         - "s4hanas"
         - "hanas"

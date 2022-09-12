@@ -49,11 +49,13 @@ oneview_machines:
     server_profile_name: RedHat_Ansible_demo_target1
 
     #### on the Bastion host:
-    cust_iso_file: "custom_rhel_uc10s4hana.iso"
-    cust_iso: "{{ bastion_iso_dir }}/custom_rhel_uc10s4hana.iso"
+    # would be good to have each server with a dedicated iso file to scale out 
+    # as they all have different setting, but space is limited
+    cust_iso_file: "custom_rhel.iso"
+    cust_iso: "{{ bastion_iso_dir }}/custom_rhel.iso"
 
     #### boot from (via network):
-    rhel_installiso: "{{ bastion_get_url }}/custom_rhel_uc10s4hana.iso"
+    rhel_installiso: "{{ bastion_get_url }}/custom_rhel.iso"
 
     #### Variables for configuring ks.cfg
     network_bootproto: dhcp

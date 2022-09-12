@@ -57,10 +57,10 @@
         state: present
         hosts:
            "{{ lookup('vars', item) }}"
-        preserve_existing_hosts: true
-        preserve_existing_children: true
+        ##preserve_existing_hosts: true
+        ##preserve_existing_children: true
       when: (item | length > 0)
-      loop: 
+      loop:
         - "s4hanas"
         - "hanas"
 
@@ -73,5 +73,5 @@
         state: present
         hosts:
           "{{ s4hanas + hanas }}"
-        preserve_existing_hosts: true
-        preserve_existing_children: true
+        ##preserve_existing_hosts: true
+        ##preserve_existing_children: true

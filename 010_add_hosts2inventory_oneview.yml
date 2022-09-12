@@ -61,8 +61,8 @@
         preserve_existing_children: true
       when: (item | length > 0)
       loop: 
-        - s4hanas 
-        - hanas
+        - "s4hanas"
+        - "hanas"
 
     - name: Add OneView Hosts to host group oneview_targets
       ansible.controller.group:

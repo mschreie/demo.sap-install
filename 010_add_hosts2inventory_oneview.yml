@@ -60,8 +60,8 @@
         preserve_existing_hosts: true
         preserve_existing_children: true
       loop:
-        - "s4hanas"
-        - "hanas"
+         - "{{ s4hanas }}"
+         - "{{ hanas }}"
 
     - name: Add OneView Hosts to host group oneview_targets
       ansible.controller.group:
@@ -75,5 +75,5 @@
         preserve_existing_hosts: true
         preserve_existing_children: true
       loop:
-        - "s4hanas"
-        - "hanas"
+         - "{{ s4hanas }}"
+         - "{{ hanas }}"

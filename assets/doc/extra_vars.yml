@@ -36,6 +36,10 @@ oneview_machines:
     group: hanas
     host_ip: "10.6.80.117"
     ilo_ip: "10.6.25.144"
+    host_netmask: "255.255.255.0"
+    host_gateway: "10.6.80.1"
+    host_nameserver: "10.11.0.13"
+    oneview_host: "10.6.25.10"
 
     # Oneview configuration
     ov_host: "10.6.25.10"

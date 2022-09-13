@@ -48,7 +48,8 @@
       port: 22
       delay: 90
       state: started
-      timeout: 480
+      timeout: 1200
+      # timeout: 480 # for VM Only
     delegate_to: localhost
 
 - name: Phase 2 - basic OS Setup

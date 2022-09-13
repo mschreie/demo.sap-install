@@ -11,7 +11,8 @@
 
     - name: Set Oneview Server Profile Name for the host in question
       set_fact:
-        ov_profile: "RedHat_Ansible_demo_{{ inventory_hostname_short }}"
+        #ov_profile: "RedHat_Ansible_demo_{{ inventory_hostname_short }}"
+        ov_profile: "{{ server_profile_name }}"
       when: ov_profile is undefined or ov_profile is not match ("^RedHat_Ansible_demo_.*")
 
     - name: Power Off compute in order to remove the profile

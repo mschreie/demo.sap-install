@@ -59,7 +59,7 @@ oneview_machines:
 
     #### Variables for configuring ks.cfg
     network_bootproto: dhcp
-    keyboard_layout: en
+    keyboard_layout: us-euro
     system_language: en_US
     time_zone: Europe/Paris
 

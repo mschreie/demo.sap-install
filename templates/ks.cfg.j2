@@ -1,4 +1,4 @@
-#jinja2: lstrip_blocks: "True", trim_blocks: "True"
+{# jinja2: lstrip_blocks: "True", trim_blocks: "True" -#}
 lang {{ system_language }}
 keyboard {{ keyboard_layout  }}
 timezone {{ time_zone }} --isUtc
@@ -23,6 +23,7 @@ network --bootproto=static
 {%- if host_nameserver is defined %} --nameserver={{ host_nameserver }} {% endif %}
 {% endif %}
 {# network --device=ens3f0 --hostname=u10hana --bootproto=static --ip=10.6.80.117 --netmask=255.255.255.0 --gateway=10.6.80.1 --nameserver=10.11.0.13 #}
+
 firstboot --disable
 selinux --enforcing
 firewall --enabled --ssh

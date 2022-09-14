@@ -11,15 +11,15 @@ clearpart --all --initlabel
 autopart
 
 auth --passalgo=sha512 --useshadow
-{% if network_bootproto is "dhcp" %}
+{% if network_bootproto == "dhcp" %}
 network --bootproto=dhcp
 {%- else -%}
 network --bootproto=static 
-{%- if name            defined %} --hostname={{ name }} {% endif -%}
-{%- if host_ip         defined %} --ip={{ host_ip }} {% endif -%}
-{%- if host_netmask    defined %} --netmask={{ host_netmask }} {% endif -%}
-{%- if host_gateway    defined %} --gateway={{ host_gateway }} {% endif -%}
-{%- if host_nameserver defined %} --nameserver={{ host_nameserver }} {% endif -%}
+{%- if name            is defined %} --hostname={{ name }} {% endif -%}
+{%- if host_ip         is defined %} --ip={{ host_ip }} {% endif -%}
+{%- if host_netmask    is defined %} --netmask={{ host_netmask }} {% endif -%}
+{%- if host_gateway    is defined %} --gateway={{ host_gateway }} {% endif -%}
+{%- if host_nameserver is defined %} --nameserver={{ host_nameserver }} {% endif -%}
 {%- endif %}
 {#- network --device=ens3f0 --hostname=u10hana --bootproto=static --ip=10.6.80.117 --netmask=255.255.255.0 --gateway=10.6.80.1 --nameserver=10.11.0.13 #}
 firstboot --disable

@@ -11,7 +11,7 @@ clearpart --all --initlabel
 autopart
 
 auth --passalgo=sha512 --useshadow
-{% if network_bootproto is "dhcp" }
+{% if network_bootproto is "dhcp" %}
 network --bootproto=dhcp
 {%- else -%}
 network --bootproto=static 

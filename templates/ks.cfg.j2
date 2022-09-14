@@ -16,6 +16,7 @@ network --bootproto=dhcp
 {%- else -%}
 network --bootproto=static 
 {%- if name            is defined %} --hostname={{ name }} {% endif -%}
+{%- if host_netdevice  is defined %} --device={{ host_netdevice }} {% endif -%}
 {%- if host_ip         is defined %} --ip={{ host_ip }} {% endif -%}
 {%- if host_netmask    is defined %} --netmask={{ host_netmask }} {% endif -%}
 {%- if host_gateway    is defined %} --gateway={{ host_gateway }} {% endif -%}

@@ -77,50 +77,51 @@
       become: true
       delegate_to: bastion_host
  
-    - name: Insert ip address and netmask if network is static
-      ansible.builtin.lineinfile:
-        path: "{{ wrk_dir }}/ks.cfg"
-        regexp: "^network --bootproto=static"
-        line: "network --bootproto=static --ip={{ machine_ip }} --netmask={{ machine_netmask }}"
-        backrefs: yes
-      when: network_bootproto == "static"
-      delegate_to: bastion_host
+## added networking config into jinja template
+#    - name: Insert ip address and netmask if network is static
+#      ansible.builtin.lineinfile:
+#        path: "{{ wrk_dir }}/ks.cfg"
+#        regexp: "^network --bootproto=static"
+#        line: "network --bootproto=static --ip={{ machine_ip }} --netmask={{ machine_netmask }}"
+#        backrefs: yes
+#      when: network_bootproto == "static"
+#      delegate_to: bastion_host
  
-    - name: Insert hostname if defined
-      ansible.builtin.lineinfile:
-        path: "{{ wrk_dir }}/ks.cfg"
-        regexp: "^(network --bootproto=(.*)?)"
-        line: \g<1> --hostname={{ machine_hostname }}
-        backrefs: yes
-      when: machine_hostname is defined
-      delegate_to: bastion_host
+#    - name: Insert hostname if defined
+#      ansible.builtin.lineinfile:
+#        path: "{{ wrk_dir }}/ks.cfg"
+#        regexp: "^(network --bootproto=(.*)?)"
+#        line: \g<1> --hostname={{ machine_hostname }}
+#        backrefs: yes
+#      when: machine_hostname is defined
+#      delegate_to: bastion_host
  
-    - name: Insert device for network configuration if defined
-      ansible.builtin.lineinfile:
-        path: "{{ wrk_dir }}/ks.cfg"
-        regexp: "^(network --bootproto=(.*)?)"
-        line: \g<1> --device={{ net_device }}
-        backrefs: yes
-      when: net_device is defined
-      delegate_to: bastion_host
+#    - name: Insert device for network configuration if defined
+#      ansible.builtin.lineinfile:
+#        path: "{{ wrk_dir }}/ks.cfg"
+#        regexp: "^(network --bootproto=(.*)?)"
+#        line: \g<1> --device={{ net_device }}
+#        backrefs: yes
+#      when: net_device is defined
+#      delegate_to: bastion_host
  
-    - name: Insert DNS if defined
-      ansible.builtin.lineinfile:
-        path: "{{ wrk_dir }}/ks.cfg"
-        regexp: "^(network --bootproto=(.*)?)"
-        line: \g<1> --nameserver={{ dns_server }}
-        backrefs: yes
-      when: (network_bootproto == "static") and (dns_server is defined)
-      delegate_to: bastion_host
+#    - name: Insert DNS if defined
+#      ansible.builtin.lineinfile:
+#        path: "{{ wrk_dir }}/ks.cfg"
+#        regexp: "^(network --bootproto=(.*)?)"
+#        line: \g<1> --nameserver={{ dns_server }}
+#        backrefs: yes
+#      when: (network_bootproto == "static") and (dns_server is defined)
+#      delegate_to: bastion_host
  
-    - name: Insert gateway if defined
-      ansible.builtin.lineinfile:
-        path: "{{ wrk_dir }}/ks.cfg"
-        regexp: "^(network --bootproto=(.*)?)"
-        line: \g<1> --gateway={{ net_gateway }}
-        backrefs: yes
-      when: (network_bootproto == "static") and (net_gateway is defined)
-      delegate_to: bastion_host
+#    - name: Insert gateway if defined
+#      ansible.builtin.lineinfile:
+#        path: "{{ wrk_dir }}/ks.cfg"
+#        regexp: "^(network --bootproto=(.*)?)"
+#        line: \g<1> --gateway={{ net_gateway }}
+#        backrefs: yes
+#      when: (network_bootproto == "static") and (net_gateway is defined)
+#      delegate_to: bastion_host
  
     - name: Insert additional user and password if defined
       ansible.builtin.lineinfile:

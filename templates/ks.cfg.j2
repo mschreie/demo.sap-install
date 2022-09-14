@@ -22,7 +22,7 @@ network --bootproto=static
 {%- if host_gateway    is defined %} --gateway={{ host_gateway }} {% endif -%}
 {%- if host_nameserver is defined %} --nameserver={{ host_nameserver }} {% endif -%}
 {%- endif %}
-{#- network --device=ens3f0 --hostname=u10hana --bootproto=static --ip=10.6.80.117 --netmask=255.255.255.0 --gateway=10.6.80.1 --nameserver=10.11.0.13 #}
+{# network --device=ens3f0 --hostname=u10hana --bootproto=static --ip=10.6.80.117 --netmask=255.255.255.0 --gateway=10.6.80.1 --nameserver=10.11.0.13 #}
 firstboot --disable
 selinux --enforcing
 firewall --enabled --ssh

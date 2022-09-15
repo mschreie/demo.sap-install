@@ -46,7 +46,9 @@ oneview_machines:
     ov_hardware: "Demo1_Rack12_Frame3, bay 5"
     server_hardware_type_name: "SY 480 Gen10 (NVIDIA)"
     enclosure_group_name: "Demo1_Rack12_EG"
-    deployment_network_name: "Redhat_workload"
+    #deployment_network_name: "Redhat_workload"
+    # Joint Network in VMware and OneView
+    deployment_network_name: "Redhat_Provisionning_1"
 
     ov_template: RedHat_Ansible_demo
     server_profile_template_name: RedHat_Ansible_demo

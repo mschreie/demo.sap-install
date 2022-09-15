@@ -173,11 +173,12 @@ sap_swpm_db_host: "uc10hana"
 sap_swpm_db_sid: "{{ sap_hana_install_sid }}"
 sap_swpm_db_instance_nr: "{{ sap_hana_install_instance_number }}"
 
-# VMware parameters:
-vmware_datacenter: 'HIT_RedHat'
-vmwware_cluster: 'HIT_RedHat'
-vmware_datastore: 'VV.HIT-RedHat'
-vmware_folder: 'HIT_RedHat/vm/UC10 - SAP'
-vmware_template: 'RHEL 8 Template'
-vmware_network: 'DPortGroup_NW1080_HIT_rh_core'
+# VMware parameters: are set at the inventory:
+#vmware_datacenter: 'HIT_RedHat'
+#vmwware_cluster: 'HIT_RedHat'
+#vmware_datastore: 'VV.HIT-RedHat'
+#vmware_folder: 'HIT_RedHat/vm/UC10 - SAP'
+#vmware_template: 'RHEL 8 Template'
+#vmware_network: 'DPortGroup_NW1080_HIT_rh_core'
+### joint network on oneview and vmware: DPortGroup_NW1081_HIT_rh_mgmt
 

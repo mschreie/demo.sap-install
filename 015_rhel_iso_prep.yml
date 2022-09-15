@@ -189,7 +189,8 @@
          - "{{ wrk_dir }}"
          - "{{ mnt_dir }}"
       delegate_to: bastion_host
- 
+      when: ansible_verbosity <= 2
+
  # avoiding noise of continous install/deinstall and speeding up deployment process
  #   - name: Remove used packages (genisoimage, mkisofs, syslinux, isomd5sum)
  #     ansible.builtin.yum:

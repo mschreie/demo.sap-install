@@ -34,10 +34,10 @@ bastion_get_url: "http://{{ hostvars.bastion_host.ansible_host }}/isos"
 oneview_machines:
   - name: uc10hana
     group: hanas
-    host_ip: "10.6.80.117"
+    host_ip: "10.6.82.117"
     ilo_ip: "10.6.25.144"
     host_netmask: "255.255.255.0"
-    host_gateway: "10.6.80.1"
+    host_gateway: "10.6.82.1"
     host_nameserver: "10.11.0.13"
     oneview_host: "10.6.25.10"
 
@@ -46,9 +46,9 @@ oneview_machines:
     ov_hardware: "Demo1_Rack12_Frame3, bay 5"
     server_hardware_type_name: "SY 480 Gen10 (NVIDIA)"
     enclosure_group_name: "Demo1_Rack12_EG"
-    #deployment_network_name: "Redhat_workload"
+    deployment_network_name: "Redhat_workload"
     # Joint Network in VMware and OneView
-    deployment_network_name: "Redhat_Provisionning_1"
+    # deployment_network_name: "Redhat_Provisionning_1"
 
     ov_template: RedHat_Ansible_demo
     server_profile_template_name: RedHat_Ansible_demo
@@ -97,7 +97,7 @@ vmware_machines:
 
 # Mountpoints for SAP Software
 nfs_software_archive_dir: /sap-software
-nfs_software_archive_srv: 10.6.80.183:/export/sap-software # DNS is unconfigured
+nfs_software_archive_srv: 10.6.82.235:/export/sap-software # DNS is unconfigured
 
 # sap_general_preconfigure
 # -------------------------
@@ -183,4 +183,5 @@ sap_swpm_db_instance_nr: "{{ sap_hana_install_instance_number }}"
 #vmware_template: 'RHEL 8 Template'
 #vmware_network: 'DPortGroup_NW1080_HIT_rh_core'
 ### joint network on oneview and vmware: DPortGroup_NW1081_HIT_rh_mgmt
+#joint network on oneview and vmware: Openshift
 

@@ -48,7 +48,8 @@
       port: 22
       delay: 90
       state: started
-      timeout: "{{ boot_timeout | default 480 }}"
+      timeout: "{% if boot_timeout is defined %}{{ boot_timeout }}{% else %}2000{% endif %}"
+      ## did not work: "{{ boot_timeout | default 480 }}"
       # timeout: 480 # for VM Only
     delegate_to: localhost
 

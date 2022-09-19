@@ -132,11 +132,9 @@ sap_hana_install_software_directory: "{{ nfs_software_archive_dir }}/{{ sap_hana
 # sap_hana_install_sapcar_filename: SAPCAR
 sap_hana_install_sapcar_filename: SAPCAR_1115-70006178.EXE
 sap_hana_install_software_extract_directory: "/home/sapinst"
-sap_hana_install_common_master_password: "R3dh4t$123"
+sap_hana_install_master_password: "R3dh4t$123"
 sap_hana_sid: 'RHA'
 sap_hana_instance_number: '00'
-sap_hana_install_instance_number: "{{ sap_hana_instance_number }}"
-sap_hana_install_sid: "{{ sap_hana_sid }}"
 
 # sap_swpm
 # ---------
@@ -173,8 +171,8 @@ sap_swpm_fqdn: "{{ ansible_domain }}"
 # HDB Instance Parameters
 # For dual host installation, change the db_host to appropriate value
 sap_swpm_db_host: "uc10hana"
-sap_swpm_db_sid: "{{ sap_hana_install_sid }}"
-sap_swpm_db_instance_nr: "{{ sap_hana_install_instance_number }}"
+sap_swpm_db_sid: "{{ sap_hana_sid }}"
+sap_swpm_db_instance_nr: "{{ sap_hana_instance_number }}"
 
 # VMware parameters: are set at the inventory:
 #vmware_datacenter: 'HIT_RedHat'

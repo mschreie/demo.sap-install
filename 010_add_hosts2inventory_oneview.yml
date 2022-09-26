@@ -25,7 +25,7 @@
         description: "{{ item.description | default(omit) }}"
         state: present
         variables:
-          "{{ item | combine({ 'ansible_host': var.host_ip}) }}"
+          "{{ item | combine({ 'ansible_host': item.host_ip}) }}"
 
       loop: "{{ oneview_machines }}"
 

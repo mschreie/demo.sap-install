@@ -25,7 +25,8 @@
         description: "{{ item.description | default(omit) }}"
         state: present
         variables:
-          "{{ item }}"
+          "{{ item | combine('ansible_host': item.host_ip) }}"
+
       loop: "{{ oneview_machines }}"
 
     - name: initiate hana host group list
@@ -56,9 +57,9 @@
         validate_certs: false
         state: present
         hosts:
-           "{{ lookup('vars', item) }}"
+          "{{ lookup('vars', item) }}"
         preserve_existing_hosts: true
-        ##preserve_existing_children: true
+        ## preserve_existing_children: true
       when: (item | length > 0)
       loop:
         - "s4hanas"
@@ -74,4 +75,4 @@
         hosts:
           "{{ s4hanas + hanas }}"
         preserve_existing_hosts: true
-        ##preserve_existing_children: true
+        ## preserve_existing_children: true

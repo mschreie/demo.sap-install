@@ -72,7 +72,9 @@ oneview_machines:
 
     ### Root Password
     rt_pass: "redhat123"
-
+    ssh_keys:
+       - user: root
+         key: "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQCpHk+g2DluyDfhXIIZjCqRORIYiM8zWwMnW5QGvZ1b5AfzE1pwF1UkujHHNlWreFXn+SuZ/CQ/fBTk6W0mH36ygIO8XnJHR3z6DOgql24v0LgjS92AaRdpGgOLWuMrYIrxzl8YOBstXqab1Cv09AmOlrxetJ+Yjs0gKWSlF93ib2T9VogC7QZ24aVmfZADkcibJNTw6x69WNkaQH1V6V/n9gwOCWCJC7HSg0A+0PuYH2ts0ExL/LBfBH2qE6gK921hLzeR7wOT/K+Jf9E3N0/F9iv2WDaVbEtUD9l1nGPOeaQz1SMMU1GzqYBLamkKYQCosXOTtRJWpRsH0htEudfInvvPFpH03jBQ8a8Z0vX6lnQai9K22wWIiYbZ/Mfxuw0X13cWZzFVJ7UMf2qMAKxdiHMTEj6BMbt/7oLUe/dLf11/KtnkIJ8FrUE5oRGWsxEmS0T3yyOo/Pt1xCBLsilGqbn1UaXcehmQJ5SkkAmeClQ3z+EiofRQDVs93JlHEn0= ansible@bastion21"
 vmware_machines:
   - name: uc10s4hana
     disk_gb: 250

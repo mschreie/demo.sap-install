@@ -5,8 +5,8 @@ timezone {{ time_zone }} --isUtc
 rootpw {{ rt_pass | password_hash('sha512') }} --iscrypted
 {% if ssh_keys is defined -%}
   {% for keypair in ssh_keys -%}
-    sshkey --username {{ keypair.user }} "{{ keypair.key }}"
- {%- endfor %}
+    sshkey --username={{ keypair.user }} "{{ keypair.key }}"
+ {% endfor %}
 {% endif %}
 reboot
 cdrom

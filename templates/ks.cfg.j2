@@ -41,7 +41,7 @@ kexec-tools
 {% if ssh_keys is defined -%}
 %post
   {% for keypair in ssh_keys -%}
-    {% if keypair.user is 'root' %}
+    {% if keypair.user == 'root' %}
 #---- Install our root SSH key ----
 mkdir -m0700 /root/.ssh/
 

@@ -3,11 +3,13 @@ lang {{ system_language }}
 keyboard {{ keyboard_layout  }}
 timezone {{ time_zone }} --isUtc
 rootpw {{ rt_pass | password_hash('sha512') }} --iscrypted
+{#
 {% if ssh_keys is defined -%}
   {% for keypair in ssh_keys -%}
     sshkey --username={{ keypair.user }} "{{ keypair.key }}"
  {% endfor %}
 {% endif %}
+#}
 reboot
 cdrom
 bootloader --append="rhgb quiet crashkernel=auto"
@@ -36,3 +38,35 @@ firewall --enabled --ssh
 @^minimal-environment
 kexec-tools
 %end
+{% if ssh_keys is defined -%}
+%post
+  {% for keypair in ssh_keys -%}
+    {% if keypair.user is 'root' %}
+#---- Install our root SSH key ----
+mkdir -m0700 /root/.ssh/
+
+cat <<EOF >/root/.ssh/authorized_keys
+{{ keypair.key }}
+EOF
+
+### set permissions
+chmod 0600 /root/.ssh/authorized_keys
+
+### fix up selinux context
+restorecon -R /root/.ssh/
+    {% else %}
+mkdir -m0700 /home/{{ keypair.user }}/.ssh/
+
+cat <<EOF >/home/{{ keypair.user }}/.ssh/authorized_keys
+{{ keypair.key }}
+EOF
+
+### set permissions
+chmod 0600 /home/{{ keypair.user }}/.ssh/authorized_keys
+
+### fix up selinux context
+restorecon -R /home/{{ keypair.user }}/.ssh/
+   {% endif %}
+ {% endfor %}
+%end
+{% endif %}

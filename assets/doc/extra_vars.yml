@@ -65,7 +65,7 @@ oneview_machines:
     rhel_installiso: "{{ bastion_get_url }}/custom_rhel.iso"
 
     #### Variables for configuring ks.cfg
-    network_bootproto: dhcp
+    network_bootproto: static
     keyboard_layout: us-euro
     system_language: en_US
     time_zone: Europe/Paris

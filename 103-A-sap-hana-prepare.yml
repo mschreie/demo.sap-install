@@ -14,9 +14,11 @@
            path: /etc/hosts
            state: absent
            regexp: '127.0.1.1\t{{ ansible_hostname }}.*'
+
      - name: re-read ansible_distribution_version as version might have changed
-       ansible.builting.setup:
+       ansible.builtin.setup:
            filter: ansible_distribution_version
+
      - name: show ansible_distribution_version
        debug:
           msg: "ansible_distribution_version: {{ ansible_distribution_version }}"

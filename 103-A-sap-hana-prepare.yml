@@ -11,22 +11,22 @@
   tasks:
      - name: Ensure VMware localhost entry is removed from /etc/hosts
        lineinfile:
-           path: /etc/hosts
-           state: absent
-           regexp: '127.0.1.1\t{{ ansible_hostname }}.*'
+          path: /etc/hosts
+          state: absent
+          regexp: '127.0.1.1\t{{ ansible_hostname }}.*'
 
-     - name: Include role: community.sap_install.sap_general_preconfigure
+     - name: Include role community.sap_install.sap_general_preconfigure
        include_role:
-         name: community.sap_install.sap_general_preconfigure
+          name: community.sap_install.sap_general_preconfigure
 
      - name: re-read ansible_distribution_version as version might have changed
        ansible.builtin.setup:
-           filter: ansible_distribution_version
+          filter: ansible_distribution_version
 
      - name: show ansible_distribution_version
        debug:
           msg: "ansible_distribution_version: {{ ansible_distribution_version }}"
-        
-     - name: Include role: community.sap_install.sap_hana_preconfigure
+
+     - name: Include role community.sap_install.sap_hana_preconfigure
        include_role:
-         name: community.sap_install.sap_hana_preconfigure
+          name: community.sap_install.sap_hana_preconfigure

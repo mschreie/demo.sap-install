@@ -1,5 +1,5 @@
 ---
-- hosts: localhost
+- hosts: oneview_targets
   gather_facts: no
 
   vars:
@@ -7,71 +7,50 @@
   tasks:
     - fail:
         msg: "You need to define ov_hardware for each host which should be deployed via this script"
-      when: item.ov_hardware is undefined 
-      loop: "{{ oneview_machines }}"
-
-
-    ### ov_profile is not used throughout this playbook => maybe this task is not needed
-##    - name: Set Oneview Server Profile Name for the host in question
-#      set_fact:
-#        {"{{ item }}.ov_profile: RedHat_Ansible_demo_{{ item.name }}"}
-#      when: item.ov_profile is undefined or item.ov_profile is not match ("^RedHat_Ansible_demo.*")
-#      loop: "{{ oneview_machines }}"
-
-    #- name: Gather facts about all Server Hardwares
-      #oneview_server_hardware_facts:
-        #hostname: "{{ item.oneview_host }}"
-        #username: "{{ oneview_username }}"
-        #password: "{{ oneview_password }}"
-        #auth_login_domain: "{{ oneview_domain }}"
-        #api_version: "{{ oneview_apiversion }}"
-      #delegate_to: localhost
-      #run_once: true
-      #loop: "{{ oneview_machines }}"
+      when: ov_hardware is undefined 
+      delegate_to: localhost
 
     - name: Power Off compute in order to remove the profile
       hpe.oneview.oneview_server_hardware:
-        hostname: "{{ item.oneview_host }}"
+        hostname: "{{ oneview_host }}"
         username: "{{ oneview_username }}"
         password: "{{ oneview_password }}"
         auth_login_domain: "{{ oneview_domain }}"
         api_version: "{{ oneview_apiversion }}"
         state: power_state_set
         data:
-          name : '{{ item.ov_hardware }}'
+          name : '{{ ov_hardware }}'
           powerStateData:
             powerState: "Off"
             powerControl: "PressAndHold"
       register: oneview_server_info
-      loop: "{{ oneview_machines }}"
+      delegate_to: localhost
 
     - name: Remove the server profiles
       hpe.oneview.oneview_server_profile:
-        hostname: "{{ item.oneview_host }}"
+        hostname: "{{ oneview_host }}"
         username: "{{ oneview_username }}"
         password: "{{ oneview_password }}"
         auth_login_domain: "{{ oneview_domain }}"
         api_version: "{{ oneview_apiversion }}"
         state: absent
         data:
-          ## 2 different deployment methods with 2 different server_profile_names
-          ## name: "{{ item.ov_template }}_{{ item.name }}"
-          name: "{{ item.server_profile_name }}"
-      loop: "{{ oneview_machines }}"
+          name: "{{ server_profile_name }}"
+      delegate_to: localhost
     
     ### FIXME: This might fail when same ov_template is used for different servers
     ### first deletion works, second will not have sth. to delete
     - name: Delete the Server Profile Template
       hpe.oneview.oneview_server_profile_template:
-        hostname: "{{ item.oneview_host }}"
+        hostname: "{{ oneview_host }}"
         username: "{{ oneview_username }}"
         password: "{{ oneview_password }}"
         auth_login_domain: "{{ oneview_domain }}"
         api_version: "{{ oneview_apiversion }}"
         state: absent
         data:
-          name: "{{ item.ov_template }}"
+          name: "{{ ov_template }}"
         params:
           force: True
-      loop: "{{ oneview_machines }}"
+      delegate_to: localhost
 

@@ -12,7 +12,6 @@ rootpw {{ rt_pass | password_hash('sha512') }} --iscrypted
 #}
 reboot
 cdrom
-bootloader --append="rhgb quiet crashkernel=auto"
 zerombr
 clearpart --all --initlabel
 # autopart
@@ -21,14 +20,14 @@ part /boot --size 1024 --fstype=xfs --ondrive=sda
 part pv.1 --size 1 --grow --fstype=xfs 
 volgroup system --pesize=32768 pv.1
 
+bootloader --append="rhgb quiet crashkernel=auto"
+
 logvol / --fstype xfs --vgname system --size=20096 --name=root
 #logvol /var --fstype xfs --vgname system --size=16384 --name=var
 #logvol /tmp --fstype xfs --vgname system --size=40960 --name=tmp
 logvol swap --vgname system --size=4096 --name=swap
 #logvol /opt --fstype xfs --vgname system --size=8192 --name=opt
 
-# Configure the bootloader.
-bootloader --location=partition
 
 
 auth --passalgo=sha512 --useshadow

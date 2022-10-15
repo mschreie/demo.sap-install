@@ -18,9 +18,10 @@ bootloader --append="rhgb quiet crashkernel=auto"
 
 # Partition clearing information
 clearpart --all --initlabel
-# autopart --nohome
+autopart --nohome
+{#
 # Disk partitioning information
-part /boot/efi --fstype="efi" --noformat --fsoptions="umask=0077,shortname=winnt"
+part /boot/efi --fstype="efi" --fsoptions="umask=0077,shortname=winnt"
 part /boot --fstype="xfs" --size=1024
 part pv.1 --size 1 --grow --fstype="lvmpv" 
 volgroup system --pesize=4096 pv.1
@@ -31,6 +32,7 @@ logvol / --fstype xfs --vgname system --size=20480 --name=root
 #logvol /var --fstype xfs --vgname system --size=16384 --name=var
 #logvol /tmp --fstype xfs --vgname system --size=40960 --name=tmp
 #logvol /opt --fstype xfs --vgname system --size=8192 --name=opt
+#}
 
 
 auth --passalgo=sha512 --useshadow

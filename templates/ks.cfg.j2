@@ -15,7 +15,7 @@ cdrom
 bootloader --append="rhgb quiet crashkernel=auto"
 zerombr
 clearpart --all --initlabel
-autopart
+# autopart
 part /boot/efi --fstype=efi --grow --maxsize=200 --size=640
 part /boot --size 1024 --fstype=xfs --ondrive=sda
 part pv.1 --size 1 --grow --fstype=xfs 

@@ -3,31 +3,32 @@ lang {{ system_language }}
 keyboard {{ keyboard_layout  }}
 timezone {{ time_zone }} --isUtc
 rootpw {{ rt_pass | password_hash('sha512') }} --iscrypted
-{#
 {% if ssh_keys is defined -%}
   {% for keypair in ssh_keys -%}
+    user --name={{ keypair.user }}
     sshkey --username={{ keypair.user }} "{{ keypair.key }}"
  {% endfor %}
 {% endif %}
-#}
 reboot
 cdrom
 zerombr
-clearpart --all --initlabel
-# autopart
-part /boot/efi --fstype=efi --grow --maxsize=200 --size=640
-part /boot --size 1024 --fstype=xfs --ondrive=sda
-part pv.1 --size 1 --grow --fstype=xfs 
-volgroup system --pesize=32768 pv.1
-
 bootloader --append="rhgb quiet crashkernel=auto"
 
-logvol / --fstype xfs --vgname system --size=20096 --name=root
+# Partition clearing information
+clearpart --all --initlabel
+# autopart --nohome
+# Disk partitioning information
+part /boot/efi --fstype="efi" --noformat --fsoptions="umask=0077,shortname=winnt"
+part /boot --fstype="xfs" --size=1024
+part pv.1 --size 1 --grow --fstype="lvmpv" 
+volgroup system --pesize=4096 pv.1
+
+logvol swap --fstype="swap" --size=4096 --name=swap --vgname=system
+logvol / --fstype xfs --vgname system --size=20480 --name=root
+
 #logvol /var --fstype xfs --vgname system --size=16384 --name=var
 #logvol /tmp --fstype xfs --vgname system --size=40960 --name=tmp
-logvol swap --vgname system --size=4096 --name=swap
 #logvol /opt --fstype xfs --vgname system --size=8192 --name=opt
-
 
 
 auth --passalgo=sha512 --useshadow
@@ -51,6 +52,7 @@ firewall --enabled --ssh
 @^minimal-environment
 kexec-tools
 %end
+{#
 {% if ssh_keys is defined -%}
 %post
   {% for keypair in ssh_keys -%}
@@ -83,3 +85,4 @@ restorecon -R /home/{{ keypair.user }}/.ssh/
  {% endfor %}
 %end
 {% endif %}
+#}

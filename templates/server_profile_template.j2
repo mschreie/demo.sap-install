@@ -5,6 +5,7 @@
   #  - Renamed
   #  - test
   managementProcessor: 
+{% if manage_mp is true -%}
     complianceControl: "Checked"
     manageMp: true
     mpSettings: 
@@ -12,7 +13,11 @@
         args: 
           deleteAdministratorAccount: false
           password: "{{ ilo_password }}"
+{% else %}
+    manageMp: false
+{%- endif %}
   bios:
+{% if manage_bios is true -%}
     complianceControl: "Checked"
     manageBios: true
     overriddenSettings: 
@@ -20,6 +25,9 @@
        value: "This is the Workshop Custom Post screen message"
      - id: "ExtendedMemTest"
        value: "Disabled"
+{% else %}
+    manageBios: false
+{%- endif %}
   boot:
     manageBoot: true
     order:

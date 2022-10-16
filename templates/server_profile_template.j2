@@ -1,7 +1,7 @@
 data:
-  name: "{{ item.server_profile_template_name }}"
-  serverHardwareTypeName: "{{ item.server_hardware_type_name }}"
-  enclosureGroupName: "{{ item.enclosure_group_name }}"
+  name: "{{ server_profile_template_name }}"
+  serverHardwareTypeName: "{{ server_hardware_type_name }}"
+  enclosureGroupName: "{{ enclosure_group_name }}"
   #initialScopeNames:
   #  - Renamed
   #  - test
@@ -37,7 +37,7 @@ data:
       - id: 1
         name: "Red Hat Wrkld"
         functionType: "Ethernet"
-        networkName: "{{ item.deployment_network_name }}"
+        networkName: "{{ deployment_network_name }}"
         ##networkName: null
         portId: "Mezz 3:1-a"
         requestedMbps: 2500

@@ -11,7 +11,7 @@
          insmod gzio
          insmod part_gpt
          insmod ext2
-         set timeout=60
+         set timeout={{ grub_timeout | default(5) }}
          ### END /etc/grub.d/00_header ###
          search --no-floppy --set=root -l '{{ rhel_label }}'
          ### BEGIN /etc/grub.d/10_linux ###

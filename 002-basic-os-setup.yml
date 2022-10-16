@@ -77,7 +77,7 @@
 
     - name: get storage pool setup from server definition
       set_fact:
-         storage_pools: "{{ vmware_machines + oneview_machines | selectattr('name', 'equalto', inventory_hostname) | sum(attribute='storage_pools', start=[]) }}"
+         storage_pools: "{{ ( vmware_machines + oneview_machines ) | selectattr('name', 'equalto', inventory_hostname) | sum(attribute='storage_pools', start=[]) }}"
 
     - name: debug storage_pools
       debug:

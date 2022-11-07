@@ -2,40 +2,6 @@
 ####################################################
 #
 # Phase 2: Basic OS Setup
-#
-# This playbook covers the following configuration steps
-#  - subscription and repositories
-#  - network setup
-#  - storage customization
-
-# For our demo, we do not need to install additional packages,
-# configure special services, monitoring and backup etc.
-# we are good with what the standard image provides
-
-# We need to provide this script the storage configuration
-# for each machine. Hence we need to extend the dictionary "gcp_machines"
-# with its individual storage configuration for the second disk, e.g.:
-
-#   gcp_machines:
-#           - name: server-name
-#             [...]
-#             storage_pools:
-#               - name: volume_name
-#                 disks:
-#                  - sdb
-#                 volumes:
-#                   - name: data
-#                     size: "128 GiB"
-#                     mount_point: "/hana/data"
-#                     fs_type: xfs
-#                     state: present
-#                   - name: log
-#                     size: "64 GiB"
-#                     mount_point: "/hana/log"
-#                     fs_type: xfs
-#                     state: present
-
-# Have a look at the documention of the storage role for more configuration options
 
 - name: Ensure Servers are booted and reachable
   hosts: hanas, s4hanas
@@ -77,7 +43,7 @@
 
     - name: get storage pool setup from server definition
       set_fact:
-         storage_pools: "{{ ( vmware_machines + oneview_machines ) | selectattr('name', 'equalto', inventory_hostname) | sum(attribute='storage_pools', start=[]) }}"
+        storage_pools: "{{ ( vmware_machines + oneview_machines ) | selectattr('name', 'equalto', inventory_hostname) | sum(attribute='storage_pools', start=[]) }}"
 
     - name: debug storage_pools
       debug:
@@ -89,15 +55,15 @@
 
     - name: NFS client is installed
       dnf:
-         name:
-           - nfs-utils
-         state: present
+        name:
+          - nfs-utils
+        state: present
 
     - name: Ensure Mountpoint exists
       file:
-         path: "{{ nfs_software_archive_dir }}"
-         state: directory
-         mode: '0755'
+        path: "{{ nfs_software_archive_dir }}"
+        state: directory
+        mode: '0755'
 
     - name: Ensure NFS Server with SAP Software is mounted
       ansible.posix.mount:
@@ -109,10 +75,24 @@
 
     # Debug by Markus S:
     - name: Read all mounts
-      ansible.builtin.shell: 
-         mount | grep nfs
+      ansible.builtin.shell:
+        mount | grep nfs
       register: mount_output
 
     - name: List all mounts
       ansible.builtin.debug:
-         var: mount_output.stdout_lines
+        var: mount_output.stdout_lines
+
+    # ensure poor mans name resolution => /etc/hosts
+    - name: ensure /etc/hosts set up correctly
+      ansible.builtin.lineinfile:
+        path: /etc/hosts
+        search_string: "{{ item }}"
+        line: "{{ hostvars[item]['ansible_default_ipv4']['address'] }}  {{ item }}"
+        owner: root
+        group: root
+        mode: '0644'
+        create: true
+      with_itmes:
+        - groups['hanas']
+        - groups['s4hanas']

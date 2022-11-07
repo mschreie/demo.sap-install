@@ -5,7 +5,7 @@
   #  - Renamed
   #  - test
   managementProcessor: 
-{% if manage_mp is true -%}
+{% if manage_mp -%}
     complianceControl: "Checked"
     manageMp: true
     mpSettings: 
@@ -17,7 +17,7 @@
     manageMp: false
 {%- endif %}
   bios:
-{% if manage_bios is true -%}
+{% if manage_bios -%}
     complianceControl: "Checked"
     manageBios: true
     overriddenSettings: 

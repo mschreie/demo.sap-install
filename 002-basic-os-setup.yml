@@ -93,6 +93,4 @@
         group: root
         mode: '0644'
         create: true
-      with_itmes:
-        - groups['hanas']
-        - groups['s4hanas']
+      loop: "{{ (groups['hanas']i,  groups['s4hanas'] ) | flatten }}"

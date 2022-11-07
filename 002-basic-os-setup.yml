@@ -94,4 +94,4 @@
         mode: '0644'
         create: true
       loop: "{{ (groups['hanas'],  groups['s4hanas'] ) | flatten }}"
-      when: {{ item != inventory_hostname }}
+      when: item != inventory_hostname 

@@ -5,7 +5,7 @@
   #  - Renamed
   #  - test
   managementProcessor: 
-{% if manage_mp -%}
+{% if manage_mp defined and manage_mp %}
     complianceControl: "Checked"
     manageMp: true
     mpSettings: 
@@ -15,9 +15,9 @@
           password: "{{ ilo_password }}"
 {% else %}
     manageMp: false
-{%- endif %}
+{% endif %}
   bios:
-{% if manage_bios -%}
+{% if manage_bios is defined and manage_bios %}
     complianceControl: "Checked"
     manageBios: true
     overriddenSettings: 
@@ -27,7 +27,7 @@
        value: "Disabled"
 {% else %}
     manageBios: false
-{%- endif %}
+{% endif %}
   boot:
     manageBoot: true
     order:

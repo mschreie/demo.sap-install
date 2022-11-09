@@ -88,7 +88,7 @@
       ansible.builtin.lineinfile:
         path: /etc/hosts
         search_string: "{{ item }}"
-        line: "{{ hostvars[item]['ansible_default_ipv4']['address'] }}  {{ item }}"
+        line: "{{ hostvars[item]['ansible_default_ipv4']['address'] }}  {{ item }}.{{ dns_domainname }} {{ item }}"
         owner: root
         group: root
         mode: '0644'

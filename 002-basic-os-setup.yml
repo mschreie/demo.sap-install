@@ -40,6 +40,14 @@
     - name: Ensure Correct subscription and repositories
       include_role:
         name: mk-ansible-roles.subscribe_rhn
+      when:
+        - not remove | bool
+
+    - name: Unsubscribe subscription and repositories
+      community.general.redhat_subscription:
+      state: absent
+      when:
+        - remove | bool
 
     - name: get storage pool setup from server definition
       set_fact:
@@ -52,18 +60,27 @@
     - name: Ensure storage is configured correctly
       include_role:
         name: redhat.rhel_system_roles.storage
+      when:
+        - not remove | bool
+
 
     - name: NFS client is installed
       dnf:
         name:
           - nfs-utils
         state: present
+      when:
+        - not remove | bool
+
 
     - name: Ensure Mountpoint exists
       file:
         path: "{{ nfs_software_archive_dir }}"
         state: directory
         mode: '0755'
+      when:
+        - not remove | bool
+
 
     - name: Ensure NFS Server with SAP Software is mounted
       ansible.posix.mount:
@@ -72,16 +89,25 @@
         opts: rw,sync,hard,noatime
         fstype: nfs
         state: mounted
+      when:
+        - not remove | bool
+
 
     # Debug by Markus S:
     - name: Read all mounts
       ansible.builtin.shell:
         mount | grep nfs
       register: mount_output
+      when:
+        - not remove | bool
+
 
     - name: List all mounts
       ansible.builtin.debug:
         var: mount_output.stdout_lines
+      when:
+        - not remove | bool
+
 
     # ensure poor mans name resolution => /etc/hosts
     - name: ensure /etc/hosts set up correctly
@@ -95,3 +121,6 @@
         create: true
       loop: "{{ (groups['hanas'],  groups['s4hanas'] ) | flatten }}"
       when: item != inventory_hostname 
+      when:
+        - not remove | bool
+

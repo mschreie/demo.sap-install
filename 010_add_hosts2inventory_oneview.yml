@@ -26,8 +26,9 @@
         state: present
         variables:
           "{{ item | combine({ 'ansible_host': item.host_ip}) }}"
-
       loop: "{{ oneview_machines }}"
+      when:
+        - not remove | bool
 
     - name: initiate hana host group list
       set_fact:
@@ -64,6 +65,8 @@
       loop:
         - "s4hanas"
         - "hanas"
+      when:
+        - not remove | bool
 
     - name: Add OneView Hosts to host group oneview_targets
       ansible.controller.group:
@@ -76,3 +79,5 @@
           "{{ s4hanas + hanas }}"
         preserve_existing_hosts: true
         ## preserve_existing_children: true
+      when:
+        - not remove | bool

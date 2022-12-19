@@ -60,9 +60,6 @@
 
   - name: Create VM from template
     community.vmware.vmware_guest:
-      # hostname: "{{ vcenter_ip }}"
-      # username: "{{ vcenter_username }}"
-      # password: "{{ vcenter_password }}"
       validate_certs: "{{ vcenter_validate_certs }}"
       name: "{{ item.name }}"
       template: "{{ vmware_template }}"
@@ -98,3 +95,16 @@
         num_cpus: "{{ item.cpus | default('4') }}"
       wait_for_ip_address: true
     loop: "{{ vmware_machines }}"
+    when:
+      - not remove | bool
+
+    community.vmware.vmware_guest:
+      validate_certs: "{{ vcenter_validate_certs }}"
+      name: "{{ item.name }}"
+      folder: "{{ vmware_folder }}"
+      state: absent
+      force: true
+    loop: "{{ vmware_machines }}"
+    when:
+      - remove | bool
+

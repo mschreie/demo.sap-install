@@ -15,7 +15,7 @@
         ov_profile: "{{ server_profile_name }}"
       when: ov_profile is undefined or ov_profile is not match ("^RedHat_Ansible_demo_.*")
 
-    - name: Power Off compute in order to remove the profile
+    - name: Power Off compute 
       hpe.oneview.oneview_server_hardware:
         hostname: "{{ oneview_host }}"
         username: "{{ oneview_username }}"
@@ -58,6 +58,8 @@
         params:
           force: True
       delegate_to: localhost
+      when:
+        - not remove | bool
 
     - name: Ensure profile state is compliant
       hpe.oneview.oneview_server_profile:
@@ -70,6 +72,8 @@
         data:
           name: "{{ ov_profile }}"
       delegate_to: localhost
+      when:
+        - not remove | bool
 
     - name: Gather sso iLO url facts about a Server Hardware
       hpe.oneview.oneview_server_hardware_facts:

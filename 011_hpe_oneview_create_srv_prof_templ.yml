@@ -18,9 +18,13 @@
           force: true
       delegate_to: localhost
       register: result
+      when:
+        - not remove | bool
 
 
     - debug: msg= "{{ result.msg }}"
+      when:
+        - not remove | bool
 
     - name: Gather facts about the Server Profile Template by name
       hpe.oneview.oneview_server_profile_template_facts:
@@ -32,5 +36,9 @@
 
         name: "{{ server_profile_template_name }}"
       delegate_to: localhost
+      when:
+        - not remove | bool
 
     - debug: var=server_profile_templates
+      when:
+        - not remove | bool

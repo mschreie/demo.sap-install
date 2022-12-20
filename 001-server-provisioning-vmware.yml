@@ -96,7 +96,7 @@
       wait_for_ip_address: true
     loop: "{{ vmware_machines }}"
     when:
-      - not remove | bool
+      - not remove | default ('false') | bool
 
   - name: Remove VM from template
     community.vmware.vmware_guest:
@@ -107,5 +107,5 @@
       force: true
     loop: "{{ vmware_machines }}"
     when:
-      - remove | bool
+      - remove | default ('false') | bool
 

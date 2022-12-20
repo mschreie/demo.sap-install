@@ -59,7 +59,7 @@
           force: True
       delegate_to: localhost
       when:
-        - not remove | bool
+        - not remove | default ('false') | bool
 
     - name: Ensure profile state is compliant
       hpe.oneview.oneview_server_profile:
@@ -73,7 +73,7 @@
           name: "{{ ov_profile }}"
       delegate_to: localhost
       when:
-        - not remove | bool
+        - not remove | default ('false') | bool
 
     - name: Gather sso iLO url facts about a Server Hardware
       hpe.oneview.oneview_server_hardware_facts:

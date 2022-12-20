@@ -47,7 +47,7 @@
 
   - name: Unsubscribe subscription and repositories
     community.general.redhat_subscription:
-    state: absent
+      state: absent
     when:
       - remove | bool
 

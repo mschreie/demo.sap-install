@@ -98,6 +98,7 @@
     when:
       - not remove | bool
 
+  - name: Remove VM from template
     community.vmware.vmware_guest:
       validate_certs: "{{ vcenter_validate_certs }}"
       name: "{{ item.name }}"

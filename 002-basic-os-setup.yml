@@ -18,6 +18,8 @@
       ## did not work: "{{ boot_timeout | default 480 }}"
       # timeout: 480 # for VM Only
     delegate_to: localhost
+    when:
+      - not remove | bool
 
 - name: Phase 2 - basic OS Setup
   hosts: hanas, s4hanas
@@ -37,90 +39,90 @@
       - rhel-8-for-x86_64-highavailability-e4s-rpms
 
   tasks:
-    - name: Ensure Correct subscription and repositories
-      include_role:
-        name: mk-ansible-roles.subscribe_rhn
-      when:
-        - not remove | bool
+  - name: Ensure Correct subscription and repositories
+    include_role:
+      name: mk-ansible-roles.subscribe_rhn
+    when:
+      - not remove | bool
 
-    - name: Unsubscribe subscription and repositories
-      community.general.redhat_subscription:
-      state: absent
-      when:
-        - remove | bool
+  - name: Unsubscribe subscription and repositories
+    community.general.redhat_subscription:
+    state: absent
+    when:
+      - remove | bool
 
-    - name: get storage pool setup from server definition
-      set_fact:
-        storage_pools: "{{ ( vmware_machines + oneview_machines ) | selectattr('name', 'equalto', inventory_hostname) | sum(attribute='storage_pools', start=[]) }}"
+  - name: get storage pool setup from server definition
+    set_fact:
+      storage_pools: "{{ ( vmware_machines + oneview_machines ) | selectattr('name', 'equalto', inventory_hostname) | sum(attribute='storage_pools', start=[]) }}"
 
-    - name: debug storage_pools
-      debug:
-        msg: “{{ storage_pools }}"
+  - name: debug storage_pools
+    debug:
+      msg: “{{ storage_pools }}"
 
-    - name: Ensure storage is configured correctly
-      include_role:
-        name: redhat.rhel_system_roles.storage
-      when:
-        - not remove | bool
-
-
-    - name: NFS client is installed
-      dnf:
-        name:
-          - nfs-utils
-        state: present
-      when:
-        - not remove | bool
+  - name: Ensure storage is configured correctly
+    include_role:
+      name: redhat.rhel_system_roles.storage
+    when:
+      - not remove | bool
 
 
-    - name: Ensure Mountpoint exists
-      file:
-        path: "{{ nfs_software_archive_dir }}"
-        state: directory
-        mode: '0755'
-      when:
-        - not remove | bool
+  - name: NFS client is installed
+    dnf:
+      name:
+        - nfs-utils
+      state: present
+    when:
+      - not remove | bool
 
 
-    - name: Ensure NFS Server with SAP Software is mounted
-      ansible.posix.mount:
-        src: "{{ nfs_software_archive_srv }}"
-        path: "{{ nfs_software_archive_dir }}"
-        opts: rw,sync,hard,noatime
-        fstype: nfs
-        state: mounted
-      when:
-        - not remove | bool
+  - name: Ensure Mountpoint exists
+    file:
+      path: "{{ nfs_software_archive_dir }}"
+      state: directory
+      mode: '0755'
+    when:
+      - not remove | bool
 
 
-    # Debug by Markus S:
-    - name: Read all mounts
-      ansible.builtin.shell:
-        mount | grep nfs
-      register: mount_output
-      when:
-        - not remove | bool
+  - name: Ensure NFS Server with SAP Software is mounted
+    ansible.posix.mount:
+      src: "{{ nfs_software_archive_srv }}"
+      path: "{{ nfs_software_archive_dir }}"
+      opts: rw,sync,hard,noatime
+      fstype: nfs
+      state: mounted
+    when:
+      - not remove | bool
 
 
-    - name: List all mounts
-      ansible.builtin.debug:
-        var: mount_output.stdout_lines
-      when:
-        - not remove | bool
+  # Debug by Markus S:
+  - name: Read all mounts
+    ansible.builtin.shell:
+      mount | grep nfs
+    register: mount_output
+    when:
+      - not remove | bool
 
 
-    # ensure poor mans name resolution => /etc/hosts
-    - name: ensure /etc/hosts set up correctly
-      ansible.builtin.lineinfile:
-        path: /etc/hosts
-        search_string: "{{ item }}"
-        line: "{{ hostvars[item]['ansible_default_ipv4']['address'] }}  {{ item }}.{{ sap_domain }} {{ item }}"
-        owner: root
-        group: root
-        mode: '0644'
-        create: true
-      loop: "{{ (groups['hanas'],  groups['s4hanas'] ) | flatten }}"
-      when: item != inventory_hostname 
-      when:
-        - not remove | bool
+  - name: List all mounts
+    ansible.builtin.debug:
+      var: mount_output.stdout_lines
+    when:
+      - not remove | bool
+
+
+  # ensure poor mans name resolution => /etc/hosts
+  - name: ensure /etc/hosts set up correctly
+    ansible.builtin.lineinfile:
+      path: /etc/hosts
+      search_string: "{{ item }}"
+      line: "{{ hostvars[item]['ansible_default_ipv4']['address'] }}  {{ item }}.{{ sap_domain }} {{ item }}"
+      owner: root
+      group: root
+      mode: '0644'
+      create: true
+    loop: "{{ (groups['hanas'],  groups['s4hanas'] ) | flatten }}"
+    when: item != inventory_hostname 
+    when:
+      - not remove | bool
 

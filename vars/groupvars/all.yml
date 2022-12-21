@@ -1,0 +1,3 @@
+---
+sap_general_preconfigure_system_roles_collection: 'redhat.rhel_system_roles'
+

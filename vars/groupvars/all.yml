@@ -1,7 +1,0 @@
----
-sap_general_preconfigure_system_roles_collection: redhat.rhel_system_roles
-sap_hana_preconfigure_system_roles_collection: redhat.rhel_system_roles
-sap_hana_install_system_roles_collection: redhat.rhel_system_roles
-
-
-

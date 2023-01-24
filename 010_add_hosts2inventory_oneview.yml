@@ -67,7 +67,7 @@
     - name: Add OneView Hosts to host groups
       ansible.controller.group:
         name: "{{ item }}"
-        ## description: "{{ item }} hosts"
+        description: "{{ item }} hosts"
         inventory: "{{ inventory_name_ov_hosts }}"
         validate_certs: false
         state: present
@@ -76,7 +76,7 @@
         preserve_existing_hosts: true
         ## preserve_existing_children: true
       loop:
-        - s4hanas
+        ## - s4hanas
         - hanas
       when: 
         - (item | length ) > 0

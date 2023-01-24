@@ -80,7 +80,7 @@
         - hanas
       when: 
         - (item | length > 0)
-        - not remove | default ('false') | bool
+        ## - not remove | default ('false') | bool
 
     - name: Add OneView Hosts to host group oneview_targets
       ansible.controller.group:

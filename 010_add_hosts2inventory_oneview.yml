@@ -58,7 +58,7 @@
         validate_certs: false
         state: present
         hosts:
-          "{{ lookup('vars', item) }}"
+          "{{ lookup('ansible.builtin.vars', item) }}"
         preserve_existing_hosts: true
         ## preserve_existing_children: true
       loop:

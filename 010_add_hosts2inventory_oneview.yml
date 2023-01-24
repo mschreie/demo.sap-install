@@ -50,6 +50,20 @@
       when: item.group == "s4hanas"
       loop: "{{ oneview_machines }}"
 
+    - name: Debug 
+      debug:
+        msg: |
+          "s4hanas: {{ s4hanas }}"
+          "hanas: {{ hanas }}"
+     
+    - name: Debug vars s4hanas
+      debug:
+        msg: "{{ lookup('vars', 's4hanas') }}"
+     
+    - name: Debug vars hanas
+      debug:
+        msg: "{{ lookup('vars', 'hanas') }}"
+     
     - name: Add OneView Hosts to host groups
       ansible.controller.group:
         name: "{{ item }}"

@@ -16,3 +16,4 @@ collections:
         - name: https://github.com/sap-linuxlab/community.sap_launchpad.git
           type: git
         - name: ansible.controller
+          version: 4.1.0

@@ -50,20 +50,6 @@
       when: item.group == "s4hanas"
       loop: "{{ oneview_machines }}"
 
-    - name: Debug 
-      debug:
-        msg: |
-          "s4hanas: {{ s4hanas }}"
-          "hanas: {{ hanas }}"
-     
-    - name: Debug vars s4hanas
-      debug:
-        msg: "{{ lookup('vars', 's4hanas') }}"
-     
-    - name: Debug vars hanas
-      debug:
-        msg: "{{ lookup('vars', 'hanas') }}"
-     
     - name: Add OneView Hosts to host groups
       ansible.controller.group:
         name: "{{ item }}"
@@ -76,11 +62,11 @@
         preserve_existing_hosts: true
         ## preserve_existing_children: true
       loop:
-        ## - s4hanas
+        - s4hanas
         - hanas
       when: 
-        - (item | length ) > 0
-        ## - not remove | default ('false') | bool
+        - lookup ('ansible.builtin.vars', item ) | length > 0
+        - not remove | default ('false') | bool
 
     - name: Add OneView Hosts to host group oneview_targets
       ansible.controller.group:

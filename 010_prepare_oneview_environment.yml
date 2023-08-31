@@ -37,7 +37,13 @@
         data:
           name: "{{ server_profile_name }}"
       delegate_to: localhost
-    
+      retries: 3
+      delay: 3
+      register: result
+      until: not result.failed
+      # sometimes the powerstate change seems still ongoing and serverprofile can not be removed
+      # the retry ensures this will wokr anyway.
+     
     ### FIXME: This might fail when same ov_template is used for different servers
     ### first deletion works, second will not have sth. to delete
     - name: Delete the Server Profile Template

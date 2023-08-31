@@ -58,22 +58,32 @@
         isolatedTrunk: false
   localStorage: 
     complianceControl: "CheckedMinimum"
-    ##sasLogicalJBODs: null
-    controllers: 
-      - deviceSlot: "Embedded"
-        mode: "Mixed"
+    sasLogicalJBODs:
+      - id: 1
+        deviceSlot: Mezz 1
+        name: EXT_OS_VOL
+        description: null
+        numPhysicalDrives: 2
+        driveMinSizeGB: 480
+        driveMaxSizeGB: 480
+        driveTechnology: SataSsd
+        eraseData: false
+        persistent: false
+    controllers:
+      - deviceSlot: Mezz 1
+        mode: Mixed
         initialize: true
-        driveWriteCache: "Unmanaged"
-        predictiveSpareRebuild: "Unmanaged"
-        logicalDrives: 
-          - name: "OS_VOL"
-            raidLevel: "RAID1"
-            bootable: true
-            numPhysicalDrives: 2
-            driveTechnology: null
-            sasLogicalJBODId: null
-            accelerator: "Unmanaged"
-            numSpareDrives: null
+        driveWriteCache: Unmanaged
+        predictiveSpareRebuild: Unmanaged
+        logicalDrives:
+        - name: null
+          raidLevel: RAID1
+          bootable: true
+          numPhysicalDrives: null
+          driveTechnology: null
+          sasLogicalJBODId: 1
+          accelerator: Unmanaged
+          numSpareDrives: null
   sanStorage:
         complianceControl: "Unchecked"
         manageSanStorage: false

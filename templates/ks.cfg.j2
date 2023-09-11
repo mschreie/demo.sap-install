@@ -1,4 +1,6 @@
 {# jinja2: lstrip_blocks: "True", trim_blocks: "True" -#}
+#version=RHEL8
+# adopted outcome from manual RHEL 8 installation on Demo_Frame bay 2 (Synergy 480 Gen10)
 lang {{ system_language }}
 keyboard {{ keyboard_layout  }}
 timezone {{ time_zone }} --isUtc
@@ -16,6 +18,7 @@ cdrom
 zerombr
 bootloader --append="rhgb quiet crashkernel=auto"
 
+ignoredisk --only-use=sde
 # Partition clearing information
 clearpart --all --initlabel
 {#

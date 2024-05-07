@@ -2,7 +2,7 @@
 collections:
         - name: vmware.vmware_rest
         #  version: 2.1.5
-        - name: community.vmware
+      ##  - name: community.vmware
         #  version: 2.6.0
         - name: redhat.rhel_system_roles
           #version: 1.7.3

@@ -21,8 +21,8 @@
       when:
         - not remove | default ('false') | bool
 
-
-    - debug: msg= "{{ result.msg }}"
+    - debug: 
+        var: result.msg
       when:
         - not remove | default ('false') | bool
 
